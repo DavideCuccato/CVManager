@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Image {
+  id         Int      @id(map: "images_pkey") @default(autoincrement())
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @db.Timestamptz(6)
+  name       String
+  vehicleId  Int
+  Vehicle    Vehicle  @relation(fields: [vehicleId], references: [id], onUpdate: Restrict, map: "images_vehicleId_fkey")
+}
+
+model Insurance {
+  id                Int                @id(map: "insurances_pkey") @default(autoincrement())
+  createdAt         DateTime           @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime           @default(now()) @db.Timestamptz(6)
+  title             String
+  firstInstallment  Decimal?           @db.Decimal
+  secondInstallment Decimal?           @db.Decimal
+  price             Decimal?           @db.Decimal
+  startDate         DateTime           @db.Date
+  endDate           DateTime           @db.Date
+  suspensionDate    DateTime?          @db.Date
+  reactivationDate  DateTime?          @db.Date
+  vehicleId         Int
+  Vehicle           Vehicle            @relation(fields: [vehicleId], references: [id], onUpdate: Restrict, map: "insurances_vehicleId_fkey")
+  InsuranceFeature  InsuranceFeature[]
+}
+
+model InsuranceFeature {
+  id          Int       @id @default(autoincrement())
+  name        String
+  insuranceId Int
+  Insurance   Insurance @relation(fields: [insuranceId], references: [id], onUpdate: Restrict)
+}
+
+model Manteinance {
+  id          Int      @id(map: "maintenances_pkey") @default(autoincrement())
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime @default(now()) @db.Timestamptz(6)
+  name        String
+  description String
+  dateDone    DateTime @db.Date
+  kilometers  Int?
+  vehicleId   Int
+  Vehicle     Vehicle  @relation(fields: [vehicleId], references: [id], onUpdate: Restrict, map: "maintenances_vehicleId_fkey")
+}
+
+model Revision {
+  id         Int      @id(map: "revisions_pkey") @default(autoincrement())
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt  DateTime @default(now()) @db.Timestamptz(6)
+  kilometers Int
+  dateDone   DateTime @db.Date
+  vehicleId  Int?
+  Vehicle    Vehicle? @relation(fields: [vehicleId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "revisions_vehicleId_fkey")
+}
+
+model Vehicle {
+  id           Int           @id(map: "vehicles_pkey") @default(autoincrement())
+  createdAt    DateTime      @default(now()) @db.Timestamptz(6)
+  updatedAt    DateTime      @default(now()) @db.Timestamptz(6)
+  name         String
+  licensePlate String?
+  buildDate    DateTime?     @db.Date
+  image        String?
+  Image        Image[]
+  Insurance    Insurance[]
+  Manteinance  Manteinance[]
+  Revision     Revision[]
+}
