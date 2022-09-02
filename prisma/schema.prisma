@@ -1,3 +1,6 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -7,71 +10,79 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Image {
-  id         Int      @id(map: "images_pkey") @default(autoincrement())
-  created_at DateTime @default(now()) @db.Timestamptz(6)
-  updated_at DateTime @default(now()) @db.Timestamptz(6)
-  name       String
-  vehicleId  Int
-  Vehicle    Vehicle  @relation(fields: [vehicleId], references: [id], onUpdate: Restrict, map: "images_vehicleId_fkey")
-}
+model Vehicle {
+  id Int @id @default(autoincrement())
 
-model Insurance {
-  id                Int                @id(map: "insurances_pkey") @default(autoincrement())
-  createdAt         DateTime           @default(now()) @db.Timestamptz(6)
-  updatedAt         DateTime           @default(now()) @db.Timestamptz(6)
-  title             String
-  firstInstallment  Decimal?           @db.Decimal
-  secondInstallment Decimal?           @db.Decimal
-  price             Decimal?           @db.Decimal
-  startDate         DateTime           @db.Date
-  endDate           DateTime           @db.Date
-  suspensionDate    DateTime?          @db.Date
-  reactivationDate  DateTime?          @db.Date
-  vehicleId         Int
-  Vehicle           Vehicle            @relation(fields: [vehicleId], references: [id], onUpdate: Restrict, map: "insurances_vehicleId_fkey")
-  InsuranceFeature  InsuranceFeature[]
-}
+  name         String
+  licensePlate String
+  buildDate    DateTime
 
-model InsuranceFeature {
-  id          Int       @id @default(autoincrement())
-  name        String
-  insuranceId Int
-  Insurance   Insurance @relation(fields: [insuranceId], references: [id], onUpdate: Restrict)
-}
+  revisions    Revision[]
+  maintenances Maintenance[]
+  insurances   Insurance[]
+  vehicleImage String?
 
-model Manteinance {
-  id          Int      @id(map: "maintenances_pkey") @default(autoincrement())
-  createdAt   DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime @default(now()) @db.Timestamptz(6)
-  name        String
-  description String
-  dateDone    DateTime @db.Date
-  kilometers  Int?
-  vehicleId   Int
-  Vehicle     Vehicle  @relation(fields: [vehicleId], references: [id], onUpdate: Restrict, map: "maintenances_vehicleId_fkey")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Revision {
-  id         Int      @id(map: "revisions_pkey") @default(autoincrement())
-  createdAt  DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt  DateTime @default(now()) @db.Timestamptz(6)
+  id Int @id @default(autoincrement())
+
   kilometers Int
-  dateDone   DateTime @db.Date
-  vehicleId  Int?
-  Vehicle    Vehicle? @relation(fields: [vehicleId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "revisions_vehicleId_fkey")
+  dateDone   DateTime
+
+  // Relation with vehicle
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id])
+  vehicleId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model Vehicle {
-  id           Int           @id(map: "vehicles_pkey") @default(autoincrement())
-  createdAt    DateTime      @default(now()) @db.Timestamptz(6)
-  updatedAt    DateTime      @default(now()) @db.Timestamptz(6)
-  name         String
-  licensePlate String?
-  buildDate    DateTime?     @db.Date
-  image        String?
-  Image        Image[]
-  Insurance    Insurance[]
-  Manteinance  Manteinance[]
-  Revision     Revision[]
+model Maintenance {
+  id Int @id @default(autoincrement())
+
+  name        String
+  description String
+  dateDone    DateTime
+  kilometers  Int?
+
+  // Relation with vehicle
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id])
+  vehicleId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Insurance {
+  id Int @id @default(autoincrement())
+
+  insuranceCompany  String
+  description       String
+  features          InsuranceFeature[]
+  firstInstallment  Decimal
+  secondInstallment Decimal
+  price             Decimal
+  startDate         DateTime
+  endDate           DateTime
+  suspensionDate    DateTime
+  reactivationDate  DateTime
+
+  // Relation with vehicle
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id])
+  vehicleId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model InsuranceFeature {
+  id Int @id @default(autoincrement())
+
+  name String
+
+  Insurance   Insurance? @relation(fields: [insuranceId], references: [id])
+  insuranceId Int?
 }
