@@ -39,7 +39,7 @@ export class VehiclesController {
 
   @Get('full/:id')
   @ApiOkResponse({ type: VehicleEntity })
-  findOneWithRelatios(@Param('id', ParseIntPipe) id: string) {
+  findOneWithRelations(@Param('id', ParseIntPipe) id: string) {
     return this.vehiclesService.findOne(+id)
   }
 
