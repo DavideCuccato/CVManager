@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 
 const isProd = process.env.NODE_ENV === 'production'
-const exposePort = isProd ? 80 : 4000
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
@@ -10,10 +9,10 @@ async function bootstrap() {
   // CORS
   app.enableCors()
 
-  await app.listen(exposePort)
+  await app.listen(4000)
 
   console.log(
-    `Application is running on: ${await app.getUrl()} | ${exposePort} | ENV: ${
+    `Application is running on: ${await app.getUrl()} | ENV: ${
       process.env.NODE_ENV
     }`
   )
