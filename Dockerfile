@@ -14,6 +14,9 @@ COPY . .
 
 RUN npm run build
 
+# Set production ENV
+ENV NODE_ENV production
+
 FROM node:18.7.0-alpine3.15
 
 COPY --from=builder /app/node_modules ./node_modules
