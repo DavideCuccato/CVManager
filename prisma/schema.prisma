@@ -19,7 +19,7 @@ model Vehicle {
 
   revisions    Revision[]
   maintenances Maintenance[]
-  Insurance    Insurance[]
+  insurances   Insurance[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -60,7 +60,7 @@ model Insurance {
 
   insuranceCompany  String
   description       String
-  feratures         InsuranceFeature[]
+  features          InsuranceFeature[]
   firstInstallment  Decimal
   secondInstallment Decimal
   price             Decimal

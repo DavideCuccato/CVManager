@@ -15,7 +15,7 @@ import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger'
 import { VehicleEntity } from './entities/vehicle.entity'
 
 @Controller('vehicles')
-@ApiTags('vehicles')
+@ApiTags('Vehicles')
 export class VehiclesController {
   constructor(private readonly vehiclesService: VehiclesService) {}
 
@@ -34,6 +34,12 @@ export class VehiclesController {
   @Get(':id')
   @ApiOkResponse({ type: VehicleEntity })
   findOne(@Param('id', ParseIntPipe) id: string) {
+    return this.vehiclesService.findOne(+id)
+  }
+
+  @Get('full/:id')
+  @ApiOkResponse({ type: VehicleEntity })
+  findOneWithRelatios(@Param('id', ParseIntPipe) id: string) {
     return this.vehiclesService.findOne(+id)
   }
 

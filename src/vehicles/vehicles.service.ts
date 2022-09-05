@@ -19,6 +19,13 @@ export class VehiclesService {
     return this.prisma.vehicle.findUnique({ where: { id } })
   }
 
+  findOneWithRelations(id: number) {
+    return this.prisma.vehicle.findUnique({
+      where: { id },
+      include: { insurances: true, maintenances: true, revisions: true },
+    })
+  }
+
   update(id: number, updateVehicleDto: UpdateVehicleDto) {
     return this.prisma.vehicle.update({
       where: { id },
