@@ -1,4 +1,3 @@
-import { Vehicle } from '@prisma/client'
 import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator'
 
 export class CreateMaintenanceDto {
@@ -10,8 +9,9 @@ export class CreateMaintenanceDto {
   @IsNotEmpty()
   description: string
 
+  @IsNumber()
   @IsNotEmpty()
-  vehicle: Vehicle
+  vehicleId: number
 
   @IsDate()
   @IsNotEmpty()

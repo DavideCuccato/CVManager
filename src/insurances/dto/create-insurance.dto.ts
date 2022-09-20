@@ -1,5 +1,11 @@
-import { InsuranceFeature } from '@prisma/client'
-import { IsString, IsNotEmpty, IsDate } from 'class-validator'
+import { Decimal } from '@prisma/client/runtime'
+import {
+  IsString,
+  IsNotEmpty,
+  IsDate,
+  IsNumber,
+  IsDecimal,
+} from 'class-validator'
 
 export class CreateInsuranceDto {
   @IsString()
@@ -10,11 +16,36 @@ export class CreateInsuranceDto {
   @IsNotEmpty()
   description: string
 
-  @IsString()
+  @IsDecimal()
   @IsNotEmpty()
-  features: InsuranceFeature[]
+  firstInstallment: Decimal
+
+  @IsDecimal()
+  @IsNotEmpty()
+  secondInstallment: Decimal
+
+  @IsDecimal()
+  @IsNotEmpty()
+  price: Decimal
 
   @IsDate()
   @IsNotEmpty()
-  buildDate: Date
+  startDate: Date
+
+  @IsDate()
+  @IsNotEmpty()
+  endDate: Date
+
+  @IsDate()
+  @IsNotEmpty()
+  suspensionDate: Date
+
+  @IsDate()
+  @IsNotEmpty()
+  reactivationDate: Date
+
+  // Relation with Vehicle
+  @IsNumber()
+  @IsNotEmpty()
+  vehicleId: number
 }
