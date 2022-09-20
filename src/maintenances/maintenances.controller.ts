@@ -15,7 +15,7 @@ import { UpdateMaintenanceDto } from './dto/update-maintenance.dto'
 import { MaintenanceEntity } from './entities/maintenance.entity'
 
 @Controller('maintenances')
-@ApiTags('Insurances')
+@ApiTags('Maintenances')
 export class MaintenancesController {
   constructor(private readonly maintenancesService: MaintenancesService) {}
 

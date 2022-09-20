@@ -10,8 +10,10 @@ import {
 import { RevisionsService } from './revisions.service'
 import { CreateRevisionDto } from './dto/create-revision.dto'
 import { UpdateRevisionDto } from './dto/update-revision.dto'
+import { ApiTags } from '@nestjs/swagger'
 
 @Controller('revisions')
+@ApiTags('Revisions')
 export class RevisionsController {
   constructor(private readonly revisionsService: RevisionsService) {}
 
