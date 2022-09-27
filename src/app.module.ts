@@ -9,7 +9,7 @@ import { InsurancesModule } from './insurances/insurances.module'
 import { loggingMiddleware } from './common/middleware/logging.middleware'
 import { MulterModule } from '@nestjs/platform-express'
 import S3 from 'aws-sdk/clients/s3'
-import aws from 'aws-sdk/global'
+import aws from 'aws-sdk'
 import multerS3 from 'multer-s3'
 
 @Module({
