@@ -8,7 +8,8 @@ import { MaintenancesModule } from './maintenances/maintenances.module'
 import { InsurancesModule } from './insurances/insurances.module'
 import { loggingMiddleware } from './common/middleware/logging.middleware'
 import { MulterModule } from '@nestjs/platform-express'
-import aws from 'aws-sdk'
+import S3 from 'aws-sdk/clients/s3'
+import aws from 'aws-sdk/global'
 import multerS3 from 'multer-s3'
 
 @Module({
@@ -21,7 +22,7 @@ import multerS3 from 'multer-s3'
     }),
     MulterModule.register({
       storage: multerS3({
-        s3: new aws.S3({
+        s3: new S3({
           endpoint: new aws.Endpoint(process.env.SPACES_ENDPOINT),
           credentials: {
             accessKeyId: process.env.SPACES_ACCESSKEY,
@@ -31,7 +32,7 @@ import multerS3 from 'multer-s3'
         bucket: process.env.SPACES_BUCKET,
         acl: 'public-read',
         key: function (request, file, cb) {
-          const fullPath = 'JarvisImages/' + file.originalname
+          const fullPath = 'CVManager/' + file.originalname
           cb(null, fullPath)
         },
       }),
