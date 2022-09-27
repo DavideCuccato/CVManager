@@ -1,4 +1,11 @@
-import { Controller, Get } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  Post,
+  UploadedFiles,
+  UseInterceptors,
+} from '@nestjs/common'
+import { FilesInterceptor } from '@nestjs/platform-express'
 import { AppService } from './app.service'
 
 @Controller()
@@ -13,5 +20,11 @@ export class AppController {
   @Get('hello')
   getHelloDiff(): string {
     return this.appService.getHello()
+  }
+
+  @Post('upload-images')
+  @UseInterceptors(FilesInterceptor('files'))
+  async uploadFile(@UploadedFiles() files) {
+    console.log(files)
   }
 }

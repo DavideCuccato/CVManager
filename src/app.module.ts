@@ -7,6 +7,9 @@ import { RevisionsModule } from './revisions/revisions.module'
 import { MaintenancesModule } from './maintenances/maintenances.module'
 import { InsurancesModule } from './insurances/insurances.module'
 import { loggingMiddleware } from './common/middleware/logging.middleware'
+import { MulterModule } from '@nestjs/platform-express'
+import aws from 'aws-sdk'
+import multerS3 from 'multer-s3'
 
 @Module({
   imports: [
@@ -15,6 +18,23 @@ import { loggingMiddleware } from './common/middleware/logging.middleware'
       prismaServiceOptions: {
         middlewares: [loggingMiddleware(new Logger('PrismaMiddleware'))],
       },
+    }),
+    MulterModule.register({
+      storage: multerS3({
+        s3: new aws.S3({
+          endpoint: new aws.Endpoint(process.env.SPACES_ENDPOINT),
+          credentials: {
+            accessKeyId: process.env.SPACES_ACCESSKEY,
+            secretAccessKey: process.env.SPACES_SECRET,
+          },
+        }),
+        bucket: process.env.SPACES_BUCKET,
+        acl: 'public-read',
+        key: function (request, file, cb) {
+          const fullPath = 'JarvisImages/' + file.originalname
+          cb(null, fullPath)
+        },
+      }),
     }),
     VehiclesModule,
     RevisionsModule,
