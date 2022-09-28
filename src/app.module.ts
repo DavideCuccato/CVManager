@@ -1,6 +1,7 @@
 import { Logger, Module } from '@nestjs/common'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
+import { ScheduleModule } from '@nestjs/schedule'
 import { PrismaModule } from 'nestjs-prisma'
 import { VehiclesModule } from './vehicles/vehicles.module'
 import { RevisionsModule } from './revisions/revisions.module'
@@ -19,9 +20,11 @@ import * as multerS3 from 'multer-s3'
         middlewares: [loggingMiddleware(new Logger('PrismaMiddleware'))],
       },
     }),
+    ScheduleModule.forRoot(),
     MulterModule.register({
       storage: multerS3({
         s3: new S3Client({
+          region: 'eu-south-1',
           endpoint: {
             hostname: process.env.SPACES_ENDPOINT,
             path: '',

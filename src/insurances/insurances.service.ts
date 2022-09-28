@@ -1,26 +1,34 @@
 import { Injectable } from '@nestjs/common'
+import { PrismaService } from 'nestjs-prisma'
 import { CreateInsuranceDto } from './dto/create-insurance.dto'
 import { UpdateInsuranceDto } from './dto/update-insurance.dto'
 
 @Injectable()
 export class InsurancesService {
+  constructor(private prisma: PrismaService) {}
+
   create(createInsuranceDto: CreateInsuranceDto) {
-    return 'This action adds a new insurance'
+    return this.prisma.insurance.create({ data: createInsuranceDto })
   }
 
   findAll() {
-    return `This action returns all insurances`
+    return this.prisma.insurance.findMany({
+      include: { vehicle: true },
+    })
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} insurance`
+    return this.prisma.insurance.findUnique({ where: { id } })
   }
 
   update(id: number, updateInsuranceDto: UpdateInsuranceDto) {
-    return `This action updates a #${id} insurance`
+    return this.prisma.insurance.update({
+      where: { id },
+      data: updateInsuranceDto,
+    })
   }
 
   remove(id: number) {
-    return `This action removes a #${id} insurance`
+    return this.prisma.insurance.delete({ where: { id } })
   }
 }

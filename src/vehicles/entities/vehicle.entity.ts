@@ -15,6 +15,9 @@ export class VehicleEntity implements Vehicle {
   buildDate: Date
 
   @ApiProperty()
+  vehicleImage: string | null
+
+  @ApiProperty()
   createdAt: Date
 
   @ApiProperty()
