@@ -1,25 +1,13 @@
-import { Logger, Module } from '@nestjs/common'
+import { Module } from '@nestjs/common'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { ScheduleModule } from '@nestjs/schedule'
-import { PrismaModule } from 'nestjs-prisma'
-import { VehiclesModule } from './vehicles/vehicles.module'
-import { RevisionsModule } from './revisions/revisions.module'
-import { MaintenancesModule } from './maintenances/maintenances.module'
-import { InsurancesModule } from './insurances/insurances.module'
-import { loggingMiddleware } from './common/middleware/logging.middleware'
 import { MulterModule } from '@nestjs/platform-express'
 import { S3Client } from '@aws-sdk/client-s3'
 import * as multerS3 from 'multer-s3'
 
 @Module({
   imports: [
-    PrismaModule.forRoot({
-      isGlobal: true,
-      prismaServiceOptions: {
-        middlewares: [loggingMiddleware(new Logger('PrismaMiddleware'))],
-      },
-    }),
     ScheduleModule.forRoot(),
     MulterModule.register({
       storage: multerS3({
@@ -43,10 +31,6 @@ import * as multerS3 from 'multer-s3'
         },
       }),
     }),
-    VehiclesModule,
-    RevisionsModule,
-    MaintenancesModule,
-    InsurancesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

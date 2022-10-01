@@ -2,12 +2,5 @@
   "language": "ts",
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
-  "compilerOptions": {
-    "plugins": [{
-      "name": "@nestjs/swagger/plugin",
-      "options": {
-        "introspectComments": true
-      }
-  }]
-  }
+  "compilerOptions": {}
 }

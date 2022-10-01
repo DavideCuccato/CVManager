@@ -1,29 +1,27 @@
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
-import { PrismaService } from 'nestjs-prisma'
+import { ValidationPipe } from '@nestjs/common'
 
 // const isProd = process.env.NODE_ENV === 'production'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
 
+  // Global Pipes
+  app.useGlobalPipes(new ValidationPipe())
+
   // CORS
   app.enableCors()
 
-  // Swagger
-  const config = new DocumentBuilder()
-    .setTitle('CV Manager')
-    .setDescription('Cuccato Veicoli Manager API')
-    .setVersion('1.0')
-    .build()
+  // // Swagger
+  // const config = new DocumentBuilder()
+  //   .setTitle('CV Manager')
+  //   .setDescription('Cuccato Veicoli Manager API')
+  //   .setVersion('1.0')
+  //   .build()
 
-  const document = SwaggerModule.createDocument(app, config)
-  SwaggerModule.setup('api', app, document)
-
-  // enable shutdown hook
-  const prismaService: PrismaService = app.get(PrismaService)
-  prismaService.enableShutdownHooks(app)
+  // const document = SwaggerModule.createDocument(app, config)
+  // SwaggerModule.setup('api', app, document)
 
   await app.listen(4000)
 
